@@ -153,35 +153,35 @@ NoMount metamount.sh
 
 ## 7. 테스트 계획 및 합격 기준
 
-| 시험 | 확인 방법 | 합격 기준 |
-|---|---|---|
-| 기본 CA 검색 | `ls /data/misc/user/0/cacerts-added/0f4ed297.*` | Personal CA 후보 확인 |
-| 파일 생성 | `ls -lZ /data/adb/modules/adguard-ca-nomount/apex/com.android.conscrypt/cacerts/` | `0f4ed297.0` 하나만 생성, 권한·레이블 적합 |
-| 내용 일치 | 소스와 생성된 파일의 SHA-256 비교 | 동일 |
-| VFS 규칙 | NoMount의 `nm rule list` | 목적지 CA 파일 규칙 존재 |
-| Android 경로 | `ls -lZ /apex/com.android.conscrypt/cacerts/0f4ed297.0` 및 실제 접근 | 인증서 접근 가능 |
-| 앱 신뢰 | AdGuard의 HTTPS 필터링 및 실제 요청 | 대상 앱에서 정상 동작 |
-| Intermediate 유지 | 사용자 인증서 목록 확인 | Intermediate CA가 사용자 저장소에 유지 |
-| tmp 경로 무사용 | 모듈 파일 정적 검색 및 설치 전후 비교 | `/data/local/tmp`에 새 변경 없음 |
-| 불필요한 마운트 없음 | `/proc/*/mountinfo` 관련 엔트리 확인 | 모듈이 추가한 tmpfs/bind mount 없음 |
-| 갱신 | AdGuard CA 재발급 후 재부팅 | 새 Personal CA가 반영 |
-| CA 삭제·실패 | 사용자 CA 삭제/손상 후 재부팅 | 오래된 시스템 CA가 자동 재주입되지 않음 |
-| 제거/롤백 | 모듈 비활성화·재부팅 | 주입 사라짐, 다른 시스템 CA 유지 |
+| 시험                 | 확인 방법                                                                         | 합격 기준                                  |
+| -------------------- | --------------------------------------------------------------------------------- | ------------------------------------------ |
+| 기본 CA 검색         | `ls /data/misc/user/0/cacerts-added/0f4ed297.*`                                   | Personal CA 후보 확인                      |
+| 파일 생성            | `ls -lZ /data/adb/modules/adguard-ca-nomount/apex/com.android.conscrypt/cacerts/` | `0f4ed297.0` 하나만 생성, 권한·레이블 적합 |
+| 내용 일치            | 소스와 생성된 파일의 SHA-256 비교                                                 | 동일                                       |
+| VFS 규칙             | NoMount의 `nm rule list`                                                          | 목적지 CA 파일 규칙 존재                   |
+| Android 경로         | `ls -lZ /apex/com.android.conscrypt/cacerts/0f4ed297.0` 및 실제 접근              | 인증서 접근 가능                           |
+| 앱 신뢰              | AdGuard의 HTTPS 필터링 및 실제 요청                                               | 대상 앱에서 정상 동작                      |
+| Intermediate 유지    | 사용자 인증서 목록 확인                                                           | Intermediate CA가 사용자 저장소에 유지     |
+| tmp 경로 무사용      | 모듈 파일 정적 검색 및 설치 전후 비교                                             | `/data/local/tmp`에 새 변경 없음           |
+| 불필요한 마운트 없음 | `/proc/*/mountinfo` 관련 엔트리 확인                                              | 모듈이 추가한 tmpfs/bind mount 없음        |
+| 갱신                 | AdGuard CA 재발급 후 재부팅                                                       | 새 Personal CA가 반영                      |
+| CA 삭제·실패         | 사용자 CA 삭제/손상 후 재부팅                                                     | 오래된 시스템 CA가 자동 재주입되지 않음    |
+| 제거/롤백            | 모듈 비활성화·재부팅                                                              | 주입 사라짐, 다른 시스템 CA 유지           |
 
 `nm rule list`에 규칙이 나타나는 것과 Android/앱이 실제로 해당 인증서를 신뢰하는 것은 다른 검증 단계다. **마운트 흔적이 없다는 것만으로 보안 앱 탐지가 불가능해지는 것은 아니다.**
 
 ## 8. 위험 요소와 대응
 
-| 위험 | 대응 |
-|---|---|
-| NoMount LKM 또는 메타모듈 미동작 | 주입 실패를 명확히 보고하고 정상 부팅을 유지 |
-| APEX 별칭/버전 경로 차이 | 실제 활성 경로 확인 후 제한적인 추가 규칙 검토 |
+| 위험                               | 대응                                                                  |
+| ---------------------------------- | --------------------------------------------------------------------- |
+| NoMount LKM 또는 메타모듈 미동작   | 주입 실패를 명확히 보고하고 정상 부팅을 유지                          |
+| APEX 별칭/버전 경로 차이           | 실제 활성 경로 확인 후 제한적인 추가 규칙 검토                        |
 | 파일은 보이지만 앱이 신뢰하지 않음 | Conscrypt 프로세스의 접근 경로·SELinux·UID 격리·인증서 체인 분리 점검 |
-| `post-fs-data` 실행 순서 차이 | 표준 KernelSU와 late-load/APatch를 구분해서 검증 |
-| AdGuard 인증서 재발급 | 매 부팅 사용자 저장소 재스캔 및 안전한 교체 |
-| 인증서 식별 오인 | 해시 파일명 외에 X.509 식별 검증을 추가 |
-| 부팅 불안정 | 모듈 단위 비활성화·복구 방법을 사전에 확보 |
-| 다른 CA 모듈과 충돌 | 동일 파일에 대한 중복 주입 금지 |
+| `post-fs-data` 실행 순서 차이      | 표준 KernelSU와 late-load/APatch를 구분해서 검증                      |
+| AdGuard 인증서 재발급              | 매 부팅 사용자 저장소 재스캔 및 안전한 교체                           |
+| 인증서 식별 오인                   | 해시 파일명 외에 X.509 식별 검증을 추가                               |
+| 부팅 불안정                        | 모듈 단위 비활성화·복구 방법을 사전에 확보                            |
+| 다른 CA 모듈과 충돌                | 동일 파일에 대한 중복 주입 금지                                       |
 
 ## 9. 권장 릴리스 순서
 

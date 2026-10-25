@@ -1,16 +1,21 @@
 {
-  "name": "adguard-nomount",
-  "type": "module",
+  "name": "adguard-ca-nomount",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "bun run scripts/build.ts",
     "test": "bun test",
+    "fmt": "oxfmt",
     "typecheck": "bun check",
     "verify:device": "bun run scripts/verify-device.ts"
   },
+  "dependencies": {
+    "kernelsu": "^3.0.2"
+  },
   "devDependencies": {
     "@types/bun": "latest",
-    "fflate": "^0.8.3"
+    "fflate": "^0.8.3",
+    "oxfmt": "^0.74.0"
   },
   "peerDependencies": {
     "typescript": "^7"

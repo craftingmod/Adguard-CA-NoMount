@@ -2,9 +2,12 @@
 
 A KernelSU module for injecting AdGuard Personal CA with NoMount.
 
-Replaces [adguardcert](https://github.com/AdguardTeam/adguardcert) which could be use `/data/local/tmp` folder.
+Replaces [adguardcert](https://github.com/AdguardTeam/adguardcert) to `NoMount` based injection.
+
+Tested on Galaxy S25 Edge with [DFRoot](https://github.com/diabl0w/DFRoot) Jailbreak.
 
 ## Development
+
 ### Build zip
 
 ```sh
@@ -15,6 +18,12 @@ bun run build
 ```
 
 Export at `dist/adguard-ca-nomount-<version>.zip`.
+
+### Module WebUI
+
+You can check `Personal CA` installed and VFS rule of NoMount Injection in webui.
+
+Use `bun run build` to compile webui.
 
 ### GitHub Releases
 
@@ -37,7 +46,7 @@ Verify checks basic CA cert is installed.
 
 ## Third party LICENSE notice
 
-* adguardcert
+- adguardcert
 
 ```
 MIT License

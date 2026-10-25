@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>AdGuard Certificate</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script type="module" src="./main.ts"></script>
+  </head>
+  <body>
+    <main class="card" aria-labelledby="title">
+      <header>
+        <svg
+          class="shield"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          aria-hidden="true"
+        >
+          <path d="M12 3 3 7v6c0 5 6 8 9 9 3-1 9-4 9-9V7l-9-4Z" />
+          <path d="m8 12 3 3 5-6" />
+        </svg>
+        <div>
+          <h1 id="title">AdGuard Certificate</h1>
+          <p>KernelSU Module WebUI</p>
+        </div>
+      </header>
+      <section aria-label="Certificate and injection status" aria-live="polite">
+        <div class="row">
+          <div>
+            <h2>Personal CA</h2>
+            <p>0f4ed297.0</p>
+          </div>
+          <span id="certificate" class="badge" role="status">Checking…</span>
+        </div>
+        <div class="row">
+          <div>
+            <h2>NoMount Injection</h2>
+            <p>VFS rule registration</p>
+          </div>
+          <span id="injection" class="badge" role="status">Checking…</span>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
