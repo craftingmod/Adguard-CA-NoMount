@@ -1,5 +1,8 @@
 # AdGuard CA for NoMount
 
+![AI generated Thumbnail](./docs/thumb.webp)
+> Thumbnail generated with GPT 6.1 Sol
+
 A KernelSU module for injecting AdGuard Personal CA with NoMount.
 
 Replaces [adguardcert](https://github.com/AdguardTeam/adguardcert) to `NoMount` based injection.
